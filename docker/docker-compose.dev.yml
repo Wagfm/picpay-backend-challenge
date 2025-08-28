@@ -1,0 +1,9 @@
+services:
+    postgres:
+        image: postgres:17-alpine3.22
+        env_file:
+            - ../config/.env
+        volumes:
+            - ../config/postgresql.conf:/etc/postgresql/postgresql.conf
+        ports:
+            - "5432:5432"
