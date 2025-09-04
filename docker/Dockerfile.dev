@@ -1,0 +1,15 @@
+FROM maven:3-eclipse-temurin-21-alpine
+
+WORKDIR /app
+
+COPY pom.xml .
+RUN mvn dependency:go-offline
+
+COPY src src
+RUN mvn clean package -DskipTests
+
+RUN mv target/*.jar target/app.jar
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "target/app.jar"]

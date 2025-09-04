@@ -39,7 +39,7 @@ case "$(lower "$ENVIRONMENT")" in
     "dev")
         cd docker || fatal "Folder 'docker' not found!";
             docker compose -f docker-compose.dev.yml down --remove-orphans
-            docker compose -f docker-compose.dev.yml up -d --build
+            docker compose -f docker-compose.dev.yml up --build
         cd ..
     ;;
     "prod")
