@@ -1,10 +1,10 @@
 FROM maven:3-eclipse-temurin-21-alpine AS builder
 
 WORKDIR /app
-COPY pom.xml .
+COPY ./pom.xml pom.xml
 RUN mvn clean dependency:go-offline
 
-COPY src src
+COPY ./src src
 RUN mvn package -DskipTests
 
 RUN jar xf $(find target -type f -name "*.jar" | head -n 1)

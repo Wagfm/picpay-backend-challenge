@@ -8,3 +8,8 @@ spring:
             ddl-auto: update
     application:
         name: api
+    devtools:
+        livereload:
+            enabled: ${SPRING_LIVERELOAD_ENABLED:false}
+        restart:
+            enabled: ${SPRING_RESTART_ENABLED:false}

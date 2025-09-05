@@ -1,4 +1,4 @@
-package picpay.challenge.api;
+package picpay.challenge.api.application.usecase.dto;
 
 import java.math.BigDecimal;
 

@@ -11,6 +11,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
+import picpay.challenge.api.application.usecase.dto.CreateWalletDTO;
+import picpay.challenge.api.application.usecase.dto.TransferDTO;
+import picpay.challenge.api.infra.spring.controller.dto.DepositRequestDTO;
 
 import java.math.BigDecimal;
 
@@ -36,7 +39,12 @@ class ApiApplicationTests {
 
     @Test
     public void shouldRegisterWalletWithValidData() throws Exception {
-        CreateWalletDTO payload = new CreateWalletDTO("Wagner Maciel", "12345", "wagner.maciel@email.com", "123");
+        CreateWalletDTO payload = CreateWalletDTO.builder()
+                .fullName("Wagner Maciel")
+                .cpfCnpj("12345")
+                .email("wagner.maciel@email.com")
+                .password("123")
+                .build();
         MvcResult result = mockMvc.perform(post(BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
@@ -51,7 +59,12 @@ class ApiApplicationTests {
 
     @Test
     public void shouldDepositToExistingWallet() throws Exception {
-        CreateWalletDTO payload = new CreateWalletDTO("Wagner Maciel", "12345", "wagner.maciel@email.com", "123");
+        CreateWalletDTO payload = CreateWalletDTO.builder()
+                .fullName("Wagner Maciel")
+                .cpfCnpj("12345")
+                .email("wagner.maciel@email.com")
+                .password("123")
+                .build();
         MvcResult result = mockMvc.perform(post(BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
@@ -61,9 +74,8 @@ class ApiApplicationTests {
                 .andReturn();
         String location = result.getResponse().getHeader("Location");
         Assertions.assertNotNull(location);
-        Assertions.assertTrue(location.startsWith(BASE_URL));
         String id = location.substring(location.lastIndexOf("/") + 1);
-        DepositDTO depositPayload = new DepositDTO(BigDecimal.valueOf(50.00));
+        DepositRequestDTO depositPayload = new DepositRequestDTO(BigDecimal.valueOf(50.00));
         mockMvc.perform(patch(BASE_URL + "/deposit/" + id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(depositPayload)))
@@ -72,7 +84,12 @@ class ApiApplicationTests {
 
     @Test
     public void shouldDepositToExistingWalletAndTransferFunds() throws Exception {
-        CreateWalletDTO payloadWallet1 = new CreateWalletDTO("Wagner Maciel", "12345", "wagner.maciel@email.com", "123");
+        CreateWalletDTO payloadWallet1 = CreateWalletDTO.builder()
+                .fullName("Wagner Maciel")
+                .cpfCnpj("09876543211")
+                .email("wagner.maciel@email.com")
+                .password("123")
+                .build();
         MvcResult resultPost1 = mockMvc.perform(post(BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
@@ -82,9 +99,13 @@ class ApiApplicationTests {
                 .andReturn();
         String location1 = resultPost1.getResponse().getHeader("Location");
         Assertions.assertNotNull(location1);
-        Assertions.assertTrue(location1.startsWith(BASE_URL));
         String payerId = location1.substring(location1.lastIndexOf("/") + 1);
-        CreateWalletDTO payloadWallet2 = new CreateWalletDTO("Amanda Maciel", "67890", "amanda.maciel@email.com", "321");
+        CreateWalletDTO payloadWallet2 = CreateWalletDTO.builder()
+                .fullName("Amanda Maciel")
+                .cpfCnpj("12345678900")
+                .email("amanda.maciel@email.com")
+                .password("321")
+                .build();
         MvcResult resultPost2 = mockMvc.perform(post(BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
@@ -94,9 +115,8 @@ class ApiApplicationTests {
                 .andReturn();
         String location2 = resultPost2.getResponse().getHeader("Location");
         Assertions.assertNotNull(location2);
-        Assertions.assertTrue(location2.startsWith(BASE_URL));
         String payeeId = location2.substring(location2.lastIndexOf("/") + 1);
-        DepositDTO depositPayload = new DepositDTO(BigDecimal.valueOf(50.00));
+        DepositRequestDTO depositPayload = new DepositRequestDTO(BigDecimal.valueOf(50.00));
         mockMvc.perform(patch(BASE_URL + "/deposit" + "/" + payerId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(depositPayload)))

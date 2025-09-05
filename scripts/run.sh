@@ -45,6 +45,9 @@ case "$(lower "$ENVIRONMENT")" in
     "prod")
         echo 'not implemented...'
     ;;
+    "test")
+        mvn clean test jacoco:report
+    ;;
     *)
         fatal "Invalid environment specification!"
     ;;
