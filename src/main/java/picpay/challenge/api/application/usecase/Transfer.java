@@ -6,6 +6,7 @@ import picpay.challenge.api.application.usecase.dto.TransferDTO;
 import picpay.challenge.api.application.usecase.dto.TransferOutputDTO;
 import picpay.challenge.api.domain.entity.Wallet;
 import picpay.challenge.api.application.usecase.dto.WalletDTO;
+import picpay.challenge.api.domain.service.TransferService;
 
 @RequiredArgsConstructor
 public class Transfer implements ICommand<TransferDTO, TransferOutputDTO> {
@@ -15,8 +16,7 @@ public class Transfer implements ICommand<TransferDTO, TransferOutputDTO> {
     public TransferOutputDTO execute(TransferDTO input) {
         Wallet payer = walletRepository.findById(input.payer());
         Wallet payee = walletRepository.findById(input.payee());
-        payer.withdraw(input.amount());
-        payee.deposit(input.amount());
+        TransferService.transfer(payer, payee, input.amount());
         walletRepository.update(payer);
         walletRepository.update(payee);
         return new TransferOutputDTO(

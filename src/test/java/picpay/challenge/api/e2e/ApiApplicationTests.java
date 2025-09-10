@@ -1,4 +1,4 @@
-package picpay.challenge.api;
+package picpay.challenge.api.e2e;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -22,9 +22,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc
 @Transactional
+@AutoConfigureMockMvc
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ApiApplicationTests {
     private final String BASE_URL = "/api/v0/wallets";
     private final MockMvc mockMvc;
@@ -41,7 +41,7 @@ class ApiApplicationTests {
     public void shouldRegisterWalletWithValidData() throws Exception {
         CreateWalletDTO payload = CreateWalletDTO.builder()
                 .fullName("Wagner Maciel")
-                .cpfCnpj("12345")
+                .cpfCnpj("12345678900")
                 .email("wagner.maciel@email.com")
                 .password("123")
                 .build();
@@ -61,7 +61,7 @@ class ApiApplicationTests {
     public void shouldDepositToExistingWallet() throws Exception {
         CreateWalletDTO payload = CreateWalletDTO.builder()
                 .fullName("Wagner Maciel")
-                .cpfCnpj("12345")
+                .cpfCnpj("12345678900")
                 .email("wagner.maciel@email.com")
                 .password("123")
                 .build();
@@ -86,7 +86,7 @@ class ApiApplicationTests {
     public void shouldDepositToExistingWalletAndTransferFunds() throws Exception {
         CreateWalletDTO payloadWallet1 = CreateWalletDTO.builder()
                 .fullName("Wagner Maciel")
-                .cpfCnpj("09876543211")
+                .cpfCnpj("12345678900")
                 .email("wagner.maciel@email.com")
                 .password("123")
                 .build();
@@ -102,7 +102,7 @@ class ApiApplicationTests {
         String payerId = location1.substring(location1.lastIndexOf("/") + 1);
         CreateWalletDTO payloadWallet2 = CreateWalletDTO.builder()
                 .fullName("Amanda Maciel")
-                .cpfCnpj("12345678900")
+                .cpfCnpj("09876543211")
                 .email("amanda.maciel@email.com")
                 .password("321")
                 .build();

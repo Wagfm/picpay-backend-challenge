@@ -21,10 +21,10 @@ import picpay.challenge.api.infra.spring.service.WalletService;
 
 import java.net.URI;
 
-@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v0/wallets")
 @CrossOrigin(origins = "*")
+@RequiredArgsConstructor
 public class WalletController {
     private final WalletService walletService;
 

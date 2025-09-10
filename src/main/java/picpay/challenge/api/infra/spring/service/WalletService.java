@@ -9,8 +9,8 @@ import picpay.challenge.api.application.usecase.dto.TransferDTO;
 import picpay.challenge.api.application.usecase.dto.TransferOutputDTO;
 import picpay.challenge.api.application.usecase.dto.WalletDTO;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class WalletService {
     private final ICommand<CreateWalletDTO, WalletDTO> createWalletCommand;
     private final ICommand<DepositDTO, WalletDTO> depositCommand;
