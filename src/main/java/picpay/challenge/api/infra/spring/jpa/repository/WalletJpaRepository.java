@@ -3,7 +3,6 @@ package picpay.challenge.api.infra.spring.jpa.repository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import picpay.challenge.api.application.repository.IWalletRepository;
-import picpay.challenge.api.application.exception.NotFoundException;
 import picpay.challenge.api.domain.entity.Wallet;
 import picpay.challenge.api.infra.spring.jpa.entity.WalletJpa;
 import picpay.challenge.api.infra.spring.jpa.mapper.JpaMapper;
@@ -29,11 +28,9 @@ public class WalletJpaRepository implements IWalletRepository {
     }
 
     @Override
-    public Wallet update(Wallet wallet) {
-        WalletJpa walletToUpdate = jpaRepository.findByWalletId(wallet.getId()).orElseThrow(() -> new NotFoundException("Wallet not found"));
+    public Optional<Wallet> update(Wallet wallet) {
         WalletJpa updatedWallet = JpaMapper.toWalletJpa(wallet);
-        updatedWallet.setId(walletToUpdate.getId());
-        return JpaMapper.toWallet(jpaRepository.save(updatedWallet));
+        return jpaRepository.updateByWalletId(updatedWallet).map(JpaMapper::toWallet);
     }
 
     @Override
