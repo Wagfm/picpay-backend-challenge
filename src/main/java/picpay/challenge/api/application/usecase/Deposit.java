@@ -1,8 +1,8 @@
 package picpay.challenge.api.application.usecase;
 
 import lombok.RequiredArgsConstructor;
-import picpay.challenge.api.application.repository.IWalletRepository;
 import picpay.challenge.api.application.exception.NotFoundException;
+import picpay.challenge.api.application.repository.IWalletRepository;
 import picpay.challenge.api.application.usecase.dto.DepositDTO;
 import picpay.challenge.api.application.usecase.dto.WalletDTO;
 import picpay.challenge.api.domain.entity.Wallet;

@@ -8,7 +8,10 @@ import java.util.UUID;
 
 public interface IWalletRepository {
     Optional<Wallet> findById(UUID id);
+
     Wallet save(Wallet wallet);
+
     Optional<Wallet> update(Wallet wallet);
+
     List<Wallet> findBy(String cpfCnpj, String email);
 }

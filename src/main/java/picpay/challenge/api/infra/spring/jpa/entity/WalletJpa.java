@@ -18,8 +18,8 @@ import java.util.UUID;
 @Table(name = "wallets")
 @Getter
 @Setter
-@NoArgsConstructor
 @Builder
+@NoArgsConstructor
 public class WalletJpa {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

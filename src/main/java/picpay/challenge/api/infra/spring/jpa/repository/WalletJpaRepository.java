@@ -35,9 +35,6 @@ public class WalletJpaRepository implements IWalletRepository {
 
     @Override
     public List<Wallet> findBy(String cpfCnpj, String email) {
-        return jpaRepository.findByCpfCnpjOrEmail(cpfCnpj, email)
-                .stream()
-                .map(JpaMapper::toWallet)
-                .toList();
+        return jpaRepository.findByCpfCnpjOrEmail(cpfCnpj, email).stream().map(JpaMapper::toWallet).toList();
     }
 }

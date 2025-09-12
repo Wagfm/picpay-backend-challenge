@@ -4,6 +4,7 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
 import picpay.challenge.api.domain.exception.InsufficientBalanceException;
@@ -14,6 +15,7 @@ import java.math.RoundingMode;
 import java.util.UUID;
 
 @Getter
+@Builder
 public class Wallet {
     @NotNull(message = "Id cannot be null")
     private final UUID id;
@@ -37,10 +39,6 @@ public class Wallet {
     @DecimalMin(value = "0.00", message = "Balance must be greater than or equal to zero")
     private BigDecimal balance;
 
-    public static Builder builder() {
-        return new Builder();
-    }
-
     public void deposit(BigDecimal amount) {
         if (amount == null) throw new ValidationException("Amount to deposit cannot be null");
         if (amount.compareTo(BigDecimal.ZERO) <= 0)
@@ -61,60 +59,13 @@ public class Wallet {
         return balance.setScale(decimalPlaces, RoundingMode.HALF_DOWN).toString();
     }
 
-    public static class Builder {
-        private UUID id;
-        private String fullName;
-        private String cpfCnpj;
-        private String email;
-        private String password;
-        private BigDecimal balance;
-
-        public Builder id(UUID id) {
-            this.id = id;
-            return this;
-        }
-
-        public Builder fullName(String fullName) {
-            this.fullName = fullName;
-            return this;
-        }
-
-        public Builder cpfCnpj(String cpfCnpj) {
-            this.cpfCnpj = cpfCnpj;
-            return this;
-        }
-
-        public Builder email(String email) {
-            this.email = email;
-            return this;
-        }
-
-        public Builder password(String password) {
-            this.password = password;
-            return this;
-        }
-
-        public Builder balance(BigDecimal balance) {
-            this.balance = balance;
-            return this;
-        }
-
-        public Wallet build() {
-            if (balance == null) balance = BigDecimal.ZERO;
-            return new Wallet(this);
-        }
-
-        private Builder() {
-        }
-    }
-
-    private Wallet(Builder builder) {
-        this.id = builder.id == null ? UUID.randomUUID() : builder.id;
-        this.fullName = builder.fullName;
-        this.cpfCnpj = builder.cpfCnpj;
-        this.email = builder.email;
-        this.password = builder.password;
-        this.balance = builder.balance;
+    private Wallet(UUID id, String fullName, String cpfCnpj, String email, String password, BigDecimal balance) {
+        this.id = id == null ? UUID.randomUUID() : id;
+        this.fullName = fullName;
+        this.cpfCnpj = cpfCnpj;
+        this.email = email;
+        this.password = password;
+        this.balance = balance == null ? BigDecimal.ZERO : balance;
         EntityValidator.validate(this);
     }
 }

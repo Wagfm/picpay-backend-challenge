@@ -15,14 +15,15 @@ public class Transfer implements ICommand<TransferDTO, TransferOutputDTO> {
 
     @Override
     public TransferOutputDTO execute(TransferDTO input) {
-        Wallet payer = walletRepository.findById(input.payer()).orElseThrow(() -> new NotFoundException("Payer wallet not found"));
-        Wallet payee = walletRepository.findById(input.payee()).orElseThrow(() -> new NotFoundException("Payee wallet not found"));
+        Wallet payer = walletRepository.findById(input.payer())
+                .orElseThrow(() -> new NotFoundException("Payer wallet not found"));
+        Wallet payee = walletRepository.findById(input.payee())
+                .orElseThrow(() -> new NotFoundException("Payee wallet not found"));
         TransferService.transfer(payer, payee, input.amount());
         walletRepository.update(payer);
         walletRepository.update(payee);
-        return new TransferOutputDTO(
-                new WalletDTO(payer.getId(), payer.getFullName(), payer.getEmail(), payer.getBalance(2)),
-                new WalletDTO(payee.getId(), payee.getFullName(), payee.getEmail(), payee.getBalance(2))
-        );
+        WalletDTO payerDTO = new WalletDTO(payer.getId(), payer.getFullName(), payer.getEmail(), payer.getBalance(2));
+        WalletDTO payeeDTO = new WalletDTO(payee.getId(), payee.getFullName(), payee.getEmail(), payee.getBalance(2));
+        return new TransferOutputDTO(payerDTO, payeeDTO);
     }
 }
