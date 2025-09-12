@@ -9,7 +9,7 @@ public final class JpaMapper {
 
     public static Wallet toWallet(WalletJpa walletJpa) {
         return Wallet.builder()
-                .id(walletJpa.getId())
+                .id(walletJpa.getWalletId())
                 .fullName(walletJpa.getFullName())
                 .cpfCnpj(walletJpa.getCpfCnpj())
                 .email(walletJpa.getEmail())
@@ -19,13 +19,13 @@ public final class JpaMapper {
     }
 
     public static WalletJpa toWalletJpa(Wallet wallet) {
-        WalletJpa walletJpa = new WalletJpa();
-        walletJpa.setId(wallet.getId());
-        walletJpa.setFullName(wallet.getFullName());
-        walletJpa.setCpfCnpj(wallet.getCpfCnpj());
-        walletJpa.setEmail(wallet.getEmail());
-        walletJpa.setPassword(wallet.getPassword());
-        walletJpa.setBalance(wallet.getBalance());
-        return walletJpa;
+        return WalletJpa.builder()
+                .walletId(wallet.getId())
+                .fullName(wallet.getFullName())
+                .cpfCnpj(wallet.getCpfCnpj())
+                .email(wallet.getEmail())
+                .password(wallet.getPassword())
+                .balance(wallet.getBalance())
+                .build();
     }
 }

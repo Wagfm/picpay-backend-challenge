@@ -11,10 +11,12 @@ import picpay.challenge.api.domain.exception.ValidationException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.UUID;
 
 @Getter
 public class Wallet {
-    private final Long id;
+    @NotNull(message = "Id cannot be null")
+    private final UUID id;
 
     @NotBlank(message = "Full name cannot be blank")
     private String fullName;
@@ -60,14 +62,14 @@ public class Wallet {
     }
 
     public static class Builder {
-        private Long id;
+        private UUID id;
         private String fullName;
         private String cpfCnpj;
         private String email;
         private String password;
         private BigDecimal balance;
 
-        public Builder id(Long id) {
+        public Builder id(UUID id) {
             this.id = id;
             return this;
         }
@@ -107,7 +109,7 @@ public class Wallet {
     }
 
     private Wallet(Builder builder) {
-        this.id = builder.id;
+        this.id = builder.id == null ? UUID.randomUUID() : builder.id;
         this.fullName = builder.fullName;
         this.cpfCnpj = builder.cpfCnpj;
         this.email = builder.email;

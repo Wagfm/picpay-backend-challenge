@@ -21,6 +21,7 @@ import picpay.challenge.api.infra.spring.jpa.repository.IWalletJpaRepository;
 import picpay.challenge.api.infra.spring.jpa.repository.WalletJpaRepository;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Transactional
 @DataJpaTest
@@ -88,7 +89,7 @@ public class DepositTests {
 
     @Test
     public void shouldNotDepositToNonExistingWallet() {
-        DepositDTO dto = new DepositDTO(wallet.id() + 1, BigDecimal.valueOf(50.00));
+        DepositDTO dto = new DepositDTO(UUID.randomUUID(), BigDecimal.valueOf(50.00));
         Assertions.assertThrows(NotFoundException.class, () -> depositCommand.execute(dto));
     }
 }

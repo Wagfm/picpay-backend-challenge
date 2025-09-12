@@ -20,6 +20,7 @@ import picpay.challenge.api.infra.spring.controller.dto.DepositRequestDTO;
 import picpay.challenge.api.infra.spring.service.WalletService;
 
 import java.net.URI;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v0/wallets")
@@ -38,7 +39,7 @@ public class WalletController {
     }
 
     @PatchMapping("/deposit/{id}")
-    public ResponseEntity<Void> deposit(@PathVariable Long id, @RequestBody DepositRequestDTO data) {
+    public ResponseEntity<Void> deposit(@PathVariable UUID id, @RequestBody DepositRequestDTO data) {
         DepositDTO dto = new DepositDTO(id, data.amount());
         walletService.deposit(dto);
         return ResponseEntity.ok().build();

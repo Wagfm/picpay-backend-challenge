@@ -16,6 +16,7 @@ import picpay.challenge.api.application.usecase.dto.TransferDTO;
 import picpay.challenge.api.infra.spring.controller.dto.DepositRequestDTO;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -121,7 +122,7 @@ class ApiApplicationTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(depositPayload)))
                 .andExpect(status().isOk());
-        TransferDTO transferDTO = new TransferDTO(Long.valueOf(payerId), Long.valueOf(payeeId), BigDecimal.valueOf(25.00));
+        TransferDTO transferDTO = new TransferDTO(UUID.fromString(payerId), UUID.fromString(payeeId), BigDecimal.valueOf(25.00));
         mockMvc.perform(patch(BASE_URL + "/transfer")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(transferDTO)))

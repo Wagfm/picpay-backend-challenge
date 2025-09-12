@@ -3,9 +3,11 @@ package picpay.challenge.api.application.repository;
 import picpay.challenge.api.domain.entity.Wallet;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 public interface IWalletRepository {
-    Wallet findById(Long id);
+    Optional<Wallet> findById(UUID id);
     Wallet save(Wallet wallet);
     Wallet update(Wallet wallet);
     List<Wallet> findBy(String cpfCnpj, String email);

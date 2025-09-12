@@ -11,14 +11,13 @@ public class TransferServiceTests {
     @Test
     public void shouldTransferWithValidData() {
         Wallet payer = Wallet.builder()
-                .id(1L)
                 .fullName("Wagner Maciel")
                 .cpfCnpj("12345678900")
                 .email("wagner.maciel@email.com")
                 .password("1234")
                 .build();
         Wallet payee = Wallet.builder()
-                .id(2L)
+                
                 .fullName("Amanda Maciel")
                 .cpfCnpj("09876543211")
                 .email("amanda.maciel@email.com")
@@ -34,7 +33,6 @@ public class TransferServiceTests {
     @Test
     public void shouldNotTransferToItself() {
         Wallet wallet = Wallet.builder()
-                .id(1L)
                 .fullName("Wagner Maciel")
                 .cpfCnpj("12345678900")
                 .email("wagner.maciel@email.com")
