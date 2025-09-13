@@ -17,7 +17,6 @@ public class TransferServiceTests {
                 .password("1234")
                 .build();
         Wallet payee = Wallet.builder()
-                
                 .fullName("Amanda Maciel")
                 .cpfCnpj("09876543211")
                 .email("amanda.maciel@email.com")
