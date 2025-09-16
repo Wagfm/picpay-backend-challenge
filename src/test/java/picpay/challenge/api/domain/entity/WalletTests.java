@@ -1,10 +1,9 @@
 
-package picpay.challenge.api.domain;
+package picpay.challenge.api.domain.entity;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import picpay.challenge.api.domain.entity.Wallet;
-import picpay.challenge.api.domain.entity.WalletType;
+import picpay.challenge.api.domain.enums.WalletType;
 import picpay.challenge.api.domain.exception.ValidationException;
 
 import java.util.List;

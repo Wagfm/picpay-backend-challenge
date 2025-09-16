@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 import picpay.challenge.api.application.usecase.dto.CreateWalletDTO;
 import picpay.challenge.api.application.usecase.dto.TransferDTO;
-import picpay.challenge.api.domain.entity.WalletType;
+import picpay.challenge.api.domain.enums.WalletType;
 import picpay.challenge.api.infra.spring.controller.dto.DepositRequestDTO;
 
 import java.math.BigDecimal;

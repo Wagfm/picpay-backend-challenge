@@ -1,7 +1,7 @@
 package picpay.challenge.api.domain.service;
 
 import picpay.challenge.api.domain.entity.Wallet;
-import picpay.challenge.api.domain.entity.WalletType;
+import picpay.challenge.api.domain.enums.WalletType;
 import picpay.challenge.api.domain.exception.ValidationException;
 
 import java.math.BigDecimal;

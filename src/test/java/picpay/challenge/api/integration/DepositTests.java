@@ -16,7 +16,7 @@ import picpay.challenge.api.application.usecase.ICommand;
 import picpay.challenge.api.application.usecase.dto.CreateWalletDTO;
 import picpay.challenge.api.application.usecase.dto.DepositDTO;
 import picpay.challenge.api.application.usecase.dto.WalletDTO;
-import picpay.challenge.api.domain.entity.WalletType;
+import picpay.challenge.api.domain.enums.WalletType;
 import picpay.challenge.api.domain.exception.ValidationException;
 import picpay.challenge.api.infra.spring.jpa.repository.IWalletJpaRepository;
 import picpay.challenge.api.infra.spring.jpa.repository.WalletJpaRepository;

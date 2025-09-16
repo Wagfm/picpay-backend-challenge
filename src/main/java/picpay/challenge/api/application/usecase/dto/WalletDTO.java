@@ -1,6 +1,6 @@
 package picpay.challenge.api.application.usecase.dto;
 
-import picpay.challenge.api.domain.entity.WalletType;
+import picpay.challenge.api.domain.enums.WalletType;
 
 import java.util.UUID;
 

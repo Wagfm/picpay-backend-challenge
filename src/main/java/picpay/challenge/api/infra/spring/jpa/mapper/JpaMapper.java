@@ -1,7 +1,7 @@
 package picpay.challenge.api.infra.spring.jpa.mapper;
 
 import picpay.challenge.api.domain.entity.Wallet;
-import picpay.challenge.api.domain.entity.WalletType;
+import picpay.challenge.api.domain.enums.WalletType;
 import picpay.challenge.api.infra.spring.jpa.entity.WalletJpa;
 
 public final class JpaMapper {
@@ -16,7 +16,7 @@ public final class JpaMapper {
                 .email(walletJpa.getEmail())
                 .password(walletJpa.getPassword())
                 .balance(walletJpa.getBalance())
-                .walletType(WalletType.valueOf(walletJpa.getWalletType()))
+                .walletType(WalletType.fromName(walletJpa.getWalletType()))
                 .build();
     }
 

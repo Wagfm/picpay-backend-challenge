@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
+import picpay.challenge.api.domain.enums.WalletType;
 import picpay.challenge.api.domain.exception.InsufficientBalanceException;
 import picpay.challenge.api.domain.exception.ValidationException;
 

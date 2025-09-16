@@ -9,7 +9,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import picpay.challenge.api.application.exception.ConflictException;
 import picpay.challenge.api.application.usecase.dto.CreateWalletDTO;
-import picpay.challenge.api.domain.entity.WalletType;
+import picpay.challenge.api.domain.enums.WalletType;
 import picpay.challenge.api.domain.exception.ValidationException;
 import picpay.challenge.api.infra.spring.service.WalletService;
 
