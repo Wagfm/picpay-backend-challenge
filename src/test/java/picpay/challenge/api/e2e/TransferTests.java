@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 import picpay.challenge.api.application.usecase.dto.CreateWalletDTO;
 import picpay.challenge.api.application.usecase.dto.TransferDTO;
+import picpay.challenge.api.domain.entity.WalletType;
 import picpay.challenge.api.infra.spring.controller.dto.DepositRequestDTO;
 
 import java.math.BigDecimal;
@@ -46,6 +47,7 @@ class TransferTests {
                 .cpfCnpj("12345678900")
                 .email("wagner.maciel@email.com")
                 .password("123")
+                .walletType(WalletType.CUSTOMER)
                 .build();
         MvcResult resultPost1 = mockMvc.perform(post(BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -62,6 +64,7 @@ class TransferTests {
                 .cpfCnpj("09876543211")
                 .email("amanda.maciel@email.com")
                 .password("321")
+                .walletType(WalletType.CUSTOMER)
                 .build();
         MvcResult resultPost2 = mockMvc.perform(post(BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)

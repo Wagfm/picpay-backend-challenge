@@ -13,6 +13,7 @@ import picpay.challenge.api.application.usecase.CreateWallet;
 import picpay.challenge.api.application.usecase.ICommand;
 import picpay.challenge.api.application.usecase.dto.CreateWalletDTO;
 import picpay.challenge.api.application.usecase.dto.WalletDTO;
+import picpay.challenge.api.domain.entity.WalletType;
 import picpay.challenge.api.domain.exception.ValidationException;
 import picpay.challenge.api.infra.spring.jpa.repository.IWalletJpaRepository;
 import picpay.challenge.api.infra.spring.jpa.repository.WalletJpaRepository;
@@ -47,6 +48,7 @@ public class CreateWalletTests {
                 .cpfCnpj("12345678900")
                 .email("wagner.maciel@email.com")
                 .password("1234")
+                .walletType(WalletType.CUSTOMER)
                 .build();
         WalletDTO createdWallet = createWalletCommand.execute(dto);
         Assertions.assertNotNull(createdWallet);
@@ -59,6 +61,7 @@ public class CreateWalletTests {
                 .cpfCnpj("")
                 .email("wagner.maciel@email.com")
                 .password("1234")
+                .walletType(WalletType.CUSTOMER)
                 .build();
         Assertions.assertThrows(ValidationException.class, () -> createWalletCommand.execute(dto));
     }
@@ -70,6 +73,7 @@ public class CreateWalletTests {
                 .cpfCnpj("12345678900")
                 .email("wagner.maciel@email.com")
                 .password("1234")
+                .walletType(WalletType.CUSTOMER)
                 .build();
         WalletDTO createdWallet = createWalletCommand.execute(dto1);
         Assertions.assertNotNull(createdWallet);
@@ -79,6 +83,7 @@ public class CreateWalletTests {
                 .cpfCnpj("09876543211")
                 .email("wagner.maciel@email.com")
                 .password("4321")
+                .walletType(WalletType.CUSTOMER)
                 .build();
         Assertions.assertThrows(ConflictException.class, () -> createWalletCommand.execute(dto2));
     }

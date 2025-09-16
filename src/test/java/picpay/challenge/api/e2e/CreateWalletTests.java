@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 import picpay.challenge.api.application.usecase.dto.CreateWalletDTO;
+import picpay.challenge.api.domain.entity.WalletType;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -40,6 +41,7 @@ public class CreateWalletTests {
                 .cpfCnpj("12345678900")
                 .email("wagner.maciel@email.com")
                 .password("123")
+                .walletType(WalletType.CUSTOMER)
                 .build();
         MvcResult result = mockMvc.perform(post(BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)

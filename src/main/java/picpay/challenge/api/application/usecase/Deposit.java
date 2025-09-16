@@ -20,6 +20,6 @@ public class Deposit implements ICommand<DepositDTO, WalletDTO> {
         Optional<Wallet> optionalWallet = walletRepository.update(walletToUpdate);
         if (optionalWallet.isEmpty()) throw new NotFoundException("Wallet not found");
         Wallet wallet = optionalWallet.get();
-        return new WalletDTO(wallet.getId(), wallet.getFullName(), wallet.getEmail(), wallet.getBalance(2));
+        return new WalletDTO(wallet.getId(), wallet.getFullName(), wallet.getEmail(), wallet.getBalance(2), wallet.getWalletType());
     }
 }

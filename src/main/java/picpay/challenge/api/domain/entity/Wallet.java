@@ -39,6 +39,9 @@ public class Wallet {
     @DecimalMin(value = "0.00", message = "Balance must be greater than or equal to zero")
     private BigDecimal balance;
 
+    @NotNull(message = "Wallet type cannot be null")
+    private WalletType walletType;
+
     public void deposit(BigDecimal amount) {
         if (amount == null) throw new ValidationException("Amount to deposit cannot be null");
         if (amount.compareTo(BigDecimal.ZERO) <= 0)
@@ -59,13 +62,14 @@ public class Wallet {
         return balance.setScale(decimalPlaces, RoundingMode.HALF_DOWN).toString();
     }
 
-    private Wallet(UUID id, String fullName, String cpfCnpj, String email, String password, BigDecimal balance) {
+    private Wallet(UUID id, String fullName, String cpfCnpj, String email, String password, BigDecimal balance, WalletType walletType) {
         this.id = id == null ? UUID.randomUUID() : id;
         this.fullName = fullName;
         this.cpfCnpj = cpfCnpj;
         this.email = email;
         this.password = password;
         this.balance = balance == null ? BigDecimal.ZERO : balance;
+        this.walletType = walletType;
         EntityValidator.validate(this);
     }
 }

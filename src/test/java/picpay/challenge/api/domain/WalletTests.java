@@ -4,6 +4,7 @@ package picpay.challenge.api.domain;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import picpay.challenge.api.domain.entity.Wallet;
+import picpay.challenge.api.domain.entity.WalletType;
 import picpay.challenge.api.domain.exception.ValidationException;
 
 import java.util.List;
@@ -15,7 +16,8 @@ public class WalletTests {
         Wallet.WalletBuilder builder = Wallet.builder()
                 .cpfCnpj("12345678900")
                 .email("maciel@email.com")
-                .password("1234");
+                .password("1234")
+                .walletType(WalletType.CUSTOMER);
         Assertions.assertThrows(ValidationException.class, builder::build);
         invalidValues.forEach(value -> {
             Assertions.assertThrows(ValidationException.class, () -> builder.fullName(value).build());
@@ -28,7 +30,8 @@ public class WalletTests {
         Wallet.WalletBuilder builder = Wallet.builder()
                 .fullName("Wagner Maciel")
                 .email("maciel@email.com")
-                .password("1234");
+                .password("1234")
+                .walletType(WalletType.CUSTOMER);
         Assertions.assertThrows(ValidationException.class, builder::build);
         invalidValues.forEach(value -> {
             Assertions.assertThrows(ValidationException.class, () -> builder.cpfCnpj(value).build());
@@ -41,7 +44,8 @@ public class WalletTests {
         Wallet.WalletBuilder builder = Wallet.builder()
                 .fullName("Wagner Maciel")
                 .cpfCnpj("12345678900")
-                .password("1234");
+                .password("1234")
+                .walletType(WalletType.CUSTOMER);
         Assertions.assertThrows(ValidationException.class, builder::build);
         invalidValues.forEach(value -> {
             Assertions.assertThrows(ValidationException.class, () -> builder.email(value).build());
@@ -54,7 +58,8 @@ public class WalletTests {
         Wallet.WalletBuilder builder = Wallet.builder()
                 .fullName("Wagner Maciel")
                 .cpfCnpj("12345678900")
-                .email("wagner.maciel@email.com");
+                .email("wagner.maciel@email.com")
+                .walletType(WalletType.CUSTOMER);
         Assertions.assertThrows(ValidationException.class, builder::build);
         invalidValues.forEach(value -> {
             Assertions.assertThrows(ValidationException.class, () -> builder.password(value).build());
@@ -67,7 +72,18 @@ public class WalletTests {
                 .fullName("Wagner Maciel")
                 .cpfCnpj("12345678900")
                 .email("wagner.maciel@email.com")
-                .password("1234");
+                .password("1234")
+                .walletType(WalletType.CUSTOMER);
         Assertions.assertDoesNotThrow(builder::build);
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenBuildingWalletWithoutWalletType() {
+        Wallet.WalletBuilder builder = Wallet.builder()
+                .fullName("Wagner Maciel")
+                .cpfCnpj("12345678900")
+                .email("wagner.maciel@email.com")
+                .password("1234");
+        Assertions.assertThrows(ValidationException.class, builder::build);
     }
 }

@@ -25,7 +25,7 @@ public class WalletJpa {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, updatable = false)
     private UUID walletId;
 
     @Column(nullable = false)
@@ -43,7 +43,10 @@ public class WalletJpa {
     @Column(nullable = false)
     private BigDecimal balance;
 
-    private WalletJpa(Long id, UUID walletId, String fullName, String cpfCnpj, String email, String password, BigDecimal balance) {
+    @Column(nullable = false)
+    private String walletType;
+
+    private WalletJpa(Long id, UUID walletId, String fullName, String cpfCnpj, String email, String password, BigDecimal balance, String walletType) {
         this.id = id;
         this.walletId = walletId;
         this.fullName = fullName;
@@ -51,5 +54,6 @@ public class WalletJpa {
         this.email = email;
         this.password = password;
         this.balance = balance;
+        this.walletType = walletType;
     }
 }

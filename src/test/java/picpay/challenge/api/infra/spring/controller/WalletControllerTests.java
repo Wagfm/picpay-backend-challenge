@@ -9,6 +9,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import picpay.challenge.api.application.exception.ConflictException;
 import picpay.challenge.api.application.usecase.dto.CreateWalletDTO;
+import picpay.challenge.api.domain.entity.WalletType;
 import picpay.challenge.api.domain.exception.ValidationException;
 import picpay.challenge.api.infra.spring.service.WalletService;
 
@@ -40,6 +41,7 @@ public class WalletControllerTests {
                 .cpfCnpj("12345678900")
                 .email("wagner.maciel@email.com")
                 .password("1234")
+                .walletType(WalletType.CUSTOMER)
                 .build();
         when(walletService.createWallet(any(CreateWalletDTO.class))).thenThrow(new ValidationException("Name must not be empty"));
         mockMvc.perform(post(BASE_URL)
@@ -55,6 +57,7 @@ public class WalletControllerTests {
                 .cpfCnpj("12345678900")
                 .email("wagner.maciel@email.com")
                 .password("1234")
+                .walletType(WalletType.CUSTOMER)
                 .build();
         when(walletService.createWallet(any(CreateWalletDTO.class))).thenThrow(new ConflictException("CPF/CNPJ already exists"));
         mockMvc.perform(post(BASE_URL)

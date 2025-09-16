@@ -19,6 +19,7 @@ import picpay.challenge.api.application.usecase.dto.DepositDTO;
 import picpay.challenge.api.application.usecase.dto.TransferDTO;
 import picpay.challenge.api.application.usecase.dto.TransferOutputDTO;
 import picpay.challenge.api.application.usecase.dto.WalletDTO;
+import picpay.challenge.api.domain.entity.WalletType;
 import picpay.challenge.api.domain.exception.InsufficientBalanceException;
 import picpay.challenge.api.domain.exception.ValidationException;
 import picpay.challenge.api.infra.spring.jpa.repository.IWalletJpaRepository;
@@ -73,6 +74,7 @@ public class TransferTests {
                 .cpfCnpj("12345678900")
                 .email("wagner.maciel@email.com")
                 .password("1234")
+                .walletType(WalletType.CUSTOMER)
                 .build();
         this.payer = createWalletCommand.execute(payerDto);
         depositCommand.execute(new DepositDTO(payer.id(), BigDecimal.valueOf(50.00)));
@@ -81,6 +83,7 @@ public class TransferTests {
                 .cpfCnpj("09876543211")
                 .email("amanda.maciel@email.com")
                 .password("4321")
+                .walletType(WalletType.CUSTOMER)
                 .build();
         this.payee = createWalletCommand.execute(payeeDto);
         depositCommand.execute(new DepositDTO(payee.id(), BigDecimal.valueOf(25.00)));

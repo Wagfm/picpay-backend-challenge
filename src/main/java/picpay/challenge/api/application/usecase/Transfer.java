@@ -22,8 +22,8 @@ public class Transfer implements ICommand<TransferDTO, TransferOutputDTO> {
         TransferService.transfer(payer, payee, input.amount());
         walletRepository.update(payer);
         walletRepository.update(payee);
-        WalletDTO payerDTO = new WalletDTO(payer.getId(), payer.getFullName(), payer.getEmail(), payer.getBalance(2));
-        WalletDTO payeeDTO = new WalletDTO(payee.getId(), payee.getFullName(), payee.getEmail(), payee.getBalance(2));
+        WalletDTO payerDTO = new WalletDTO(payer.getId(), payer.getFullName(), payer.getEmail(), payer.getBalance(2), payer.getWalletType());
+        WalletDTO payeeDTO = new WalletDTO(payee.getId(), payee.getFullName(), payee.getEmail(), payee.getBalance(2), payee.getWalletType());
         return new TransferOutputDTO(payerDTO, payeeDTO);
     }
 }

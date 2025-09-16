@@ -29,8 +29,9 @@ public class CreateWallet implements ICommand<CreateWalletDTO, WalletDTO> {
                 .email(input.email())
                 .password(input.password())
                 .balance(BigDecimal.ZERO)
+                .walletType(input.walletType())
                 .build();
         Wallet wallet = walletRepository.save(walletToCreate);
-        return new WalletDTO(wallet.getId(), wallet.getFullName(), wallet.getEmail(), wallet.getBalance(2));
+        return new WalletDTO(wallet.getId(), wallet.getFullName(), wallet.getEmail(), wallet.getBalance(2), wallet.getWalletType());
     }
 }

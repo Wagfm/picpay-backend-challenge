@@ -16,6 +16,7 @@ import picpay.challenge.api.application.usecase.ICommand;
 import picpay.challenge.api.application.usecase.dto.CreateWalletDTO;
 import picpay.challenge.api.application.usecase.dto.DepositDTO;
 import picpay.challenge.api.application.usecase.dto.WalletDTO;
+import picpay.challenge.api.domain.entity.WalletType;
 import picpay.challenge.api.domain.exception.ValidationException;
 import picpay.challenge.api.infra.spring.jpa.repository.IWalletJpaRepository;
 import picpay.challenge.api.infra.spring.jpa.repository.WalletJpaRepository;
@@ -61,6 +62,7 @@ public class DepositTests {
                 .cpfCnpj("12345678900")
                 .email("wagner.maciel@email.com")
                 .password("1234")
+                .walletType(WalletType.CUSTOMER)
                 .build();
         this.wallet = createWalletCommand.execute(dto);
     }
