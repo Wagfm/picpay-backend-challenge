@@ -2,13 +2,17 @@ package picpay.challenge.api.application.usecase;
 
 import lombok.RequiredArgsConstructor;
 import picpay.challenge.api.application.exception.NotFoundException;
+import picpay.challenge.api.application.repository.ITransactionRepository;
 import picpay.challenge.api.application.repository.IWalletRepository;
 import picpay.challenge.api.application.usecase.dto.TransactionDTO;
+import picpay.challenge.api.application.usecase.dto.TransactionMapper;
 import picpay.challenge.api.application.usecase.dto.TransferDTO;
+import picpay.challenge.api.domain.entity.Transaction;
 import picpay.challenge.api.domain.entity.Wallet;
+import picpay.challenge.api.domain.enums.TransactionStatus;
+import picpay.challenge.api.domain.enums.TransactionType;
 import picpay.challenge.api.domain.service.TransferService;
 
-import java.math.RoundingMode;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.UUID;
@@ -16,6 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class Transfer implements ICommand<TransferDTO, TransactionDTO> {
     private final IWalletRepository walletRepository;
+    private final ITransactionRepository transactionRepository;
 
     @Override
     public TransactionDTO execute(TransferDTO input) {
@@ -26,14 +31,15 @@ public class Transfer implements ICommand<TransferDTO, TransactionDTO> {
         TransferService.transfer(payer, payee, input.amount());
         walletRepository.update(payer);
         walletRepository.update(payee);
-        return TransactionDTO.builder()
+        Transaction transaction = Transaction.builder()
                 .operationId(UUID.randomUUID())
-                .sourceWallet(payer.getId())
-                .destinationWallet(payee.getId())
-                .amount(input.amount().setScale(2, RoundingMode.HALF_UP).toString())
-                .status("COMPLETED")
-                .operationType("TRANSFER")
-                .timestamp(ZonedDateTime.now(ZoneId.of("GMT")).toString())
+                .sourceWallet(payer)
+                .destinationWallet(payee)
+                .amount(input.amount())
+                .status(TransactionStatus.COMPLETED)
+                .transactionType(TransactionType.TRANSFER)
+                .timestamp(ZonedDateTime.now(ZoneId.of("GMT")))
                 .build();
+        return TransactionMapper.toDto(transactionRepository.save(transaction));
     }
 }

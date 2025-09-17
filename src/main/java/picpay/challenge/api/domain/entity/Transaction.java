@@ -21,9 +21,9 @@ public class Transaction {
     @NotNull(message = "Operation ID cannot be null")
     private final UUID operationId;
 
-    private final UUID sourceWalletId;
+    private final Wallet sourceWallet;
 
-    private final UUID destinationWalletId;
+    private final Wallet destinationWallet;
 
     @NotNull(message = "Amount cannot be null")
     @DecimalMin(value = "0.01", message = "Amount must be greater than zero")
@@ -38,11 +38,11 @@ public class Transaction {
     @NotNull(message = "Timestamp cannot be null")
     private final ZonedDateTime timestamp;
 
-    private Transaction(UUID id, UUID operationId, UUID sourceWalletId, UUID destinationWalletId, BigDecimal amount, TransactionStatus status, TransactionType transactionType, ZonedDateTime timestamp) {
+    private Transaction(UUID id, UUID operationId, Wallet sourceWallet, Wallet destinationWallet, BigDecimal amount, TransactionStatus status, TransactionType transactionType, ZonedDateTime timestamp) {
         this.id = id == null ? UUID.randomUUID() : id;
         this.operationId = operationId == null ? UUID.randomUUID() : operationId;
-        this.sourceWalletId = sourceWalletId;
-        this.destinationWalletId = destinationWalletId;
+        this.sourceWallet = sourceWallet;
+        this.destinationWallet = destinationWallet;
         this.amount = amount;
         this.status = status;
         this.transactionType = transactionType;
@@ -53,6 +53,6 @@ public class Transaction {
 
     private void validate() {
         if (this.transactionType == null) throw new ValidationException("Type cannot be null");
-        transactionType.validate(this.sourceWalletId, this.destinationWalletId);
+        transactionType.validate(this.sourceWallet, this.destinationWallet);
     }
 }

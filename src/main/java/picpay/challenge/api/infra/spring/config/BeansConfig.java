@@ -2,6 +2,7 @@ package picpay.challenge.api.infra.spring.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import picpay.challenge.api.application.repository.ITransactionRepository;
 import picpay.challenge.api.application.repository.IWalletRepository;
 import picpay.challenge.api.application.usecase.CreateWallet;
 import picpay.challenge.api.application.usecase.Deposit;
@@ -21,12 +22,12 @@ public class BeansConfig {
     }
 
     @Bean
-    public ICommand<DepositDTO, TransactionDTO> depositCommand(IWalletRepository walletRepository) {
-        return new Deposit(walletRepository);
+    public ICommand<DepositDTO, TransactionDTO> depositCommand(IWalletRepository walletRepository, ITransactionRepository transactionRepository) {
+        return new Deposit(walletRepository, transactionRepository);
     }
 
     @Bean
-    public ICommand<TransferDTO, TransactionDTO> transferCommand(IWalletRepository walletRepository) {
-        return new Transfer(walletRepository);
+    public ICommand<TransferDTO, TransactionDTO> transferCommand(IWalletRepository walletRepository, ITransactionRepository transactionRepository) {
+        return new Transfer(walletRepository, transactionRepository);
     }
 }

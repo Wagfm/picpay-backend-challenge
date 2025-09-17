@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.transaction.annotation.Transactional;
 import picpay.challenge.api.application.exception.NotFoundException;
+import picpay.challenge.api.application.repository.ITransactionRepository;
 import picpay.challenge.api.application.repository.IWalletRepository;
 import picpay.challenge.api.application.usecase.CreateWallet;
 import picpay.challenge.api.application.usecase.Deposit;
@@ -22,7 +23,9 @@ import picpay.challenge.api.application.usecase.dto.WalletDTO;
 import picpay.challenge.api.domain.enums.WalletType;
 import picpay.challenge.api.domain.exception.InsufficientBalanceException;
 import picpay.challenge.api.domain.exception.ValidationException;
+import picpay.challenge.api.infra.spring.jpa.repository.ITransactionJpaRepository;
 import picpay.challenge.api.infra.spring.jpa.repository.IWalletJpaRepository;
+import picpay.challenge.api.infra.spring.jpa.repository.TransactionJpaRepository;
 import picpay.challenge.api.infra.spring.jpa.repository.WalletJpaRepository;
 
 import java.math.BigDecimal;
@@ -52,18 +55,23 @@ public class TransferTests {
         }
 
         @Bean
+        public ITransactionRepository transactionRepository(ITransactionJpaRepository transactionJpaRepository, IWalletJpaRepository walletJpaRepository) {
+            return new TransactionJpaRepository(transactionJpaRepository, walletJpaRepository);
+        }
+
+        @Bean
         public ICommand<CreateWalletDTO, WalletDTO> createWalletCommand(IWalletRepository walletRepository) {
             return new CreateWallet(walletRepository);
         }
 
         @Bean
-        public ICommand<DepositDTO, TransactionDTO> depositCommand(IWalletRepository walletRepository) {
-            return new Deposit(walletRepository);
+        public ICommand<DepositDTO, TransactionDTO> depositCommand(IWalletRepository walletRepository, ITransactionRepository transactionRepository) {
+            return new Deposit(walletRepository, transactionRepository);
         }
 
         @Bean
-        public ICommand<TransferDTO, TransactionDTO> transferCommand(IWalletRepository walletRepository) {
-            return new Transfer(walletRepository);
+        public ICommand<TransferDTO, TransactionDTO> transferCommand(IWalletRepository walletRepository, ITransactionRepository transactionRepository) {
+            return new Transfer(walletRepository, transactionRepository);
         }
     }
 
@@ -98,7 +106,7 @@ public class TransferTests {
         Assertions.assertEquals(payee.id(), output.destinationWallet());
         Assertions.assertEquals("25.00", output.amount());
         Assertions.assertEquals("COMPLETED", output.status());
-        Assertions.assertEquals("TRANSFER", output.operationType());
+        Assertions.assertEquals("TRANSFER", output.transactionType());
         Assertions.assertNotNull(output.timestamp());
     }
 

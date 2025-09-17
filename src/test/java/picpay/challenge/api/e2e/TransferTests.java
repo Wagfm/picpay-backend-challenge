@@ -96,6 +96,6 @@ class TransferTests {
         Assertions.assertEquals(UUID.fromString(payeeId), dto.destinationWallet());
         Assertions.assertEquals("25.00", dto.amount());
         Assertions.assertEquals("COMPLETED", dto.status());
-        Assertions.assertEquals("TRANSFER", dto.operationType());
+        Assertions.assertEquals("TRANSFER", dto.transactionType());
     }
 }

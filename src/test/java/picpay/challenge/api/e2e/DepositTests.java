@@ -73,7 +73,7 @@ public class DepositTests {
         Assertions.assertNull(dto.sourceWallet());
         Assertions.assertEquals("50.00", dto.amount());
         Assertions.assertEquals("COMPLETED", dto.status());
-        Assertions.assertEquals("DEPOSIT", dto.operationType());
+        Assertions.assertEquals("DEPOSIT", dto.transactionType());
         Assertions.assertNotNull(dto.timestamp());
     }
 }

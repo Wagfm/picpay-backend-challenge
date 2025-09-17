@@ -9,10 +9,10 @@ public final class TransactionMapper {
         return TransactionDTO.builder()
                 .id(transaction.getId())
                 .operationId(transaction.getOperationId())
-                .sourceWallet(transaction.getSourceWalletId())
-                .destinationWallet(transaction.getDestinationWalletId())
+                .sourceWallet(transaction.getSourceWallet() != null ? transaction.getSourceWallet().getId() : null)
+                .destinationWallet(transaction.getDestinationWallet() != null ? transaction.getDestinationWallet().getId() : null)
                 .amount(transaction.getAmount().setScale(2, RoundingMode.HALF_UP).toString())
-                .operationType(transaction.getTransactionType().name())
+                .transactionType(transaction.getTransactionType().name())
                 .status(transaction.getStatus().name())
                 .timestamp(transaction.getTimestamp().toString())
                 .build();

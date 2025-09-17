@@ -2,6 +2,7 @@ package picpay.challenge.api.application.usecase;
 
 import lombok.RequiredArgsConstructor;
 import picpay.challenge.api.application.exception.NotFoundException;
+import picpay.challenge.api.application.repository.ITransactionRepository;
 import picpay.challenge.api.application.repository.IWalletRepository;
 import picpay.challenge.api.application.usecase.dto.DepositDTO;
 import picpay.challenge.api.application.usecase.dto.TransactionDTO;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class Deposit implements ICommand<DepositDTO, TransactionDTO> {
     private final IWalletRepository walletRepository;
+    private final ITransactionRepository transactionRepository;
 
     @Override
     public TransactionDTO execute(DepositDTO input) {
@@ -29,12 +31,12 @@ public class Deposit implements ICommand<DepositDTO, TransactionDTO> {
         Wallet wallet = optionalWallet.get();
         Transaction transaction = Transaction.builder()
                 .operationId(UUID.randomUUID())
-                .destinationWalletId(wallet.getId())
+                .destinationWallet(wallet)
                 .amount(input.amount())
                 .transactionType(TransactionType.DEPOSIT)
                 .status(TransactionStatus.COMPLETED)
                 .timestamp(ZonedDateTime.now(ZoneId.of("GMT")))
                 .build();
-        return TransactionMapper.toDto(transaction);
+        return TransactionMapper.toDto(transactionRepository.save(transaction));
     }
 }

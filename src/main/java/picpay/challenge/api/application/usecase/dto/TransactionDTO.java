@@ -12,6 +12,6 @@ public record TransactionDTO(
         UUID destinationWallet,
         String amount,
         String status,
-        String operationType,
+        String transactionType,
         String timestamp
 ) { }

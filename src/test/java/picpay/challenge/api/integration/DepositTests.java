@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.transaction.annotation.Transactional;
 import picpay.challenge.api.application.exception.NotFoundException;
+import picpay.challenge.api.application.repository.ITransactionRepository;
 import picpay.challenge.api.application.repository.IWalletRepository;
 import picpay.challenge.api.application.usecase.CreateWallet;
 import picpay.challenge.api.application.usecase.Deposit;
@@ -19,7 +20,9 @@ import picpay.challenge.api.application.usecase.dto.TransactionDTO;
 import picpay.challenge.api.application.usecase.dto.WalletDTO;
 import picpay.challenge.api.domain.enums.WalletType;
 import picpay.challenge.api.domain.exception.ValidationException;
+import picpay.challenge.api.infra.spring.jpa.repository.ITransactionJpaRepository;
 import picpay.challenge.api.infra.spring.jpa.repository.IWalletJpaRepository;
+import picpay.challenge.api.infra.spring.jpa.repository.TransactionJpaRepository;
 import picpay.challenge.api.infra.spring.jpa.repository.WalletJpaRepository;
 
 import java.math.BigDecimal;
@@ -46,13 +49,18 @@ public class DepositTests {
         }
 
         @Bean
+        public ITransactionRepository transactionRepository(ITransactionJpaRepository transactionJpaRepository, IWalletJpaRepository walletJpaRepository) {
+            return new TransactionJpaRepository(transactionJpaRepository, walletJpaRepository);
+        }
+
+        @Bean
         public ICommand<CreateWalletDTO, WalletDTO> createWalletCommand(IWalletRepository walletRepository) {
             return new CreateWallet(walletRepository);
         }
 
         @Bean
-        public ICommand<DepositDTO, TransactionDTO> depositCommand(IWalletRepository walletRepository) {
-            return new Deposit(walletRepository);
+        public ICommand<DepositDTO, TransactionDTO> depositCommand(IWalletRepository walletRepository, ITransactionRepository transactionRepository) {
+            return new Deposit(walletRepository, transactionRepository);
         }
     }
 
