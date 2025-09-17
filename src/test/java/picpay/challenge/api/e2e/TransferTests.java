@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 import picpay.challenge.api.application.usecase.dto.CreateWalletDTO;
+import picpay.challenge.api.application.usecase.dto.TransactionDTO;
 import picpay.challenge.api.application.usecase.dto.TransferDTO;
 import picpay.challenge.api.domain.enums.WalletType;
 import picpay.challenge.api.infra.spring.controller.dto.DepositRequestDTO;
@@ -82,9 +83,19 @@ class TransferTests {
                         .content(objectMapper.writeValueAsString(depositPayload)))
                 .andExpect(status().isOk());
         TransferDTO transferDTO = new TransferDTO(UUID.fromString(payerId), UUID.fromString(payeeId), BigDecimal.valueOf(25.00));
-        mockMvc.perform(patch(BASE_URL + "/transfer")
+        MvcResult resultTransfer = mockMvc.perform(patch(BASE_URL + "/transfer")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(transferDTO)))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andReturn();
+        String response = resultTransfer.getResponse().getContentAsString();
+        Assertions.assertNotNull(response);
+        TransactionDTO dto = objectMapper.readValue(response, TransactionDTO.class);
+        Assertions.assertNotNull(dto.operationId());
+        Assertions.assertEquals(UUID.fromString(payerId), dto.sourceWallet());
+        Assertions.assertEquals(UUID.fromString(payeeId), dto.destinationWallet());
+        Assertions.assertEquals("25.00", dto.amount());
+        Assertions.assertEquals("COMPLETED", dto.status());
+        Assertions.assertEquals("TRANSFER", dto.operationType());
     }
 }

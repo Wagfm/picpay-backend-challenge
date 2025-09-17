@@ -15,7 +15,6 @@ import picpay.challenge.api.application.usecase.dto.CreateWalletDTO;
 import picpay.challenge.api.application.usecase.dto.DepositDTO;
 import picpay.challenge.api.application.usecase.dto.TransactionDTO;
 import picpay.challenge.api.application.usecase.dto.TransferDTO;
-import picpay.challenge.api.application.usecase.dto.TransferOutputDTO;
 import picpay.challenge.api.application.usecase.dto.WalletDTO;
 import picpay.challenge.api.infra.spring.controller.dto.DepositRequestDTO;
 import picpay.challenge.api.infra.spring.service.WalletService;
@@ -47,8 +46,8 @@ public class WalletController {
     }
 
     @PatchMapping("/transfer")
-    public ResponseEntity<TransferOutputDTO> transfer(@RequestBody TransferDTO data) {
-        TransferOutputDTO dto = walletService.transfer(data);
+    public ResponseEntity<TransactionDTO> transfer(@RequestBody TransferDTO data) {
+        TransactionDTO dto = walletService.transfer(data);
         return ResponseEntity.ok(dto);
     }
 }

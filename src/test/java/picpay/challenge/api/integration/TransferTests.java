@@ -18,7 +18,6 @@ import picpay.challenge.api.application.usecase.dto.CreateWalletDTO;
 import picpay.challenge.api.application.usecase.dto.DepositDTO;
 import picpay.challenge.api.application.usecase.dto.TransactionDTO;
 import picpay.challenge.api.application.usecase.dto.TransferDTO;
-import picpay.challenge.api.application.usecase.dto.TransferOutputDTO;
 import picpay.challenge.api.application.usecase.dto.WalletDTO;
 import picpay.challenge.api.domain.enums.WalletType;
 import picpay.challenge.api.domain.exception.InsufficientBalanceException;
@@ -34,12 +33,12 @@ import java.util.UUID;
 public class TransferTests {
     private final ICommand<CreateWalletDTO, WalletDTO> createWalletCommand;
     private final ICommand<DepositDTO, TransactionDTO> depositCommand;
-    private final ICommand<TransferDTO, TransferOutputDTO> transferCommand;
+    private final ICommand<TransferDTO, TransactionDTO> transferCommand;
     private WalletDTO payer;
     private WalletDTO payee;
 
     @Autowired
-    public TransferTests(ICommand<CreateWalletDTO, WalletDTO> createWalletCommand, ICommand<DepositDTO, TransactionDTO> depositCommand, ICommand<TransferDTO, TransferOutputDTO> transferCommand) {
+    public TransferTests(ICommand<CreateWalletDTO, WalletDTO> createWalletCommand, ICommand<DepositDTO, TransactionDTO> depositCommand, ICommand<TransferDTO, TransactionDTO> transferCommand) {
         this.createWalletCommand = createWalletCommand;
         this.depositCommand = depositCommand;
         this.transferCommand = transferCommand;
@@ -63,7 +62,7 @@ public class TransferTests {
         }
 
         @Bean
-        public ICommand<TransferDTO, TransferOutputDTO> transferCommand(IWalletRepository walletRepository) {
+        public ICommand<TransferDTO, TransactionDTO> transferCommand(IWalletRepository walletRepository) {
             return new Transfer(walletRepository);
         }
     }
@@ -93,10 +92,14 @@ public class TransferTests {
     @Test
     public void shouldTransferWithValidData() {
         TransferDTO dto = new TransferDTO(payer.id(), payee.id(), BigDecimal.valueOf(25.00));
-        TransferOutputDTO output = transferCommand.execute(dto);
+        TransactionDTO output = transferCommand.execute(dto);
         Assertions.assertNotNull(output);
-        Assertions.assertEquals("25.00", output.payer().balance());
-        Assertions.assertEquals("50.00", output.payee().balance());
+        Assertions.assertEquals(payer.id(), output.sourceWallet());
+        Assertions.assertEquals(payee.id(), output.destinationWallet());
+        Assertions.assertEquals("25.00", output.amount());
+        Assertions.assertEquals("COMPLETED", output.status());
+        Assertions.assertEquals("TRANSFER", output.operationType());
+        Assertions.assertNotNull(output.timestamp());
     }
 
     @Test

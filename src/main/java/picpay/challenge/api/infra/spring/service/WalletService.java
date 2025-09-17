@@ -7,7 +7,6 @@ import picpay.challenge.api.application.usecase.dto.CreateWalletDTO;
 import picpay.challenge.api.application.usecase.dto.DepositDTO;
 import picpay.challenge.api.application.usecase.dto.TransactionDTO;
 import picpay.challenge.api.application.usecase.dto.TransferDTO;
-import picpay.challenge.api.application.usecase.dto.TransferOutputDTO;
 import picpay.challenge.api.application.usecase.dto.WalletDTO;
 
 @Service
@@ -15,7 +14,7 @@ import picpay.challenge.api.application.usecase.dto.WalletDTO;
 public class WalletService {
     private final ICommand<CreateWalletDTO, WalletDTO> createWalletCommand;
     private final ICommand<DepositDTO, TransactionDTO> depositCommand;
-    private final ICommand<TransferDTO, TransferOutputDTO> transferCommand;
+    private final ICommand<TransferDTO, TransactionDTO> transferCommand;
 
     public WalletDTO createWallet(CreateWalletDTO dto) {
         return createWalletCommand.execute(dto);
@@ -25,7 +24,7 @@ public class WalletService {
         return depositCommand.execute(dto);
     }
 
-    public TransferOutputDTO transfer(TransferDTO dto) {
+    public TransactionDTO transfer(TransferDTO dto) {
         return transferCommand.execute(dto);
     }
 }

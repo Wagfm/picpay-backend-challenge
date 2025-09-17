@@ -11,7 +11,6 @@ import picpay.challenge.api.application.usecase.dto.CreateWalletDTO;
 import picpay.challenge.api.application.usecase.dto.DepositDTO;
 import picpay.challenge.api.application.usecase.dto.TransactionDTO;
 import picpay.challenge.api.application.usecase.dto.TransferDTO;
-import picpay.challenge.api.application.usecase.dto.TransferOutputDTO;
 import picpay.challenge.api.application.usecase.dto.WalletDTO;
 
 @Configuration
@@ -27,7 +26,7 @@ public class BeansConfig {
     }
 
     @Bean
-    public ICommand<TransferDTO, TransferOutputDTO> transferCommand(IWalletRepository walletRepository) {
+    public ICommand<TransferDTO, TransactionDTO> transferCommand(IWalletRepository walletRepository) {
         return new Transfer(walletRepository);
     }
 }
