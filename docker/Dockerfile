@@ -31,4 +31,5 @@ COPY --from=builder /opt/jre /opt/jre
 COPY --from=builder /app/target/*.jar app.jar
 
 EXPOSE 8080
+
 ENTRYPOINT ["/opt/jre/bin/java", "-jar", "app.jar"]
