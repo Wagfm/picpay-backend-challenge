@@ -33,26 +33,26 @@ public class Transaction {
     private final TransactionStatus status;
 
     @NotNull(message = "Type cannot be null")
-    private final TransactionType type;
+    private final TransactionType transactionType;
 
     @NotNull(message = "Timestamp cannot be null")
     private final ZonedDateTime timestamp;
 
-    private Transaction(UUID id, UUID operationId, UUID sourceWalletId, UUID destinationWalletId, BigDecimal amount, TransactionStatus status, TransactionType type, ZonedDateTime timestamp) {
+    private Transaction(UUID id, UUID operationId, UUID sourceWalletId, UUID destinationWalletId, BigDecimal amount, TransactionStatus status, TransactionType transactionType, ZonedDateTime timestamp) {
         this.id = id == null ? UUID.randomUUID() : id;
-        this.operationId = operationId;
+        this.operationId = operationId == null ? UUID.randomUUID() : operationId;
         this.sourceWalletId = sourceWalletId;
         this.destinationWalletId = destinationWalletId;
         this.amount = amount;
         this.status = status;
-        this.type = type;
+        this.transactionType = transactionType;
         this.timestamp = timestamp;
         EntityValidator.validate(this);
         this.validate();
     }
 
     private void validate() {
-        if (this.type == null) throw new ValidationException("Type cannot be null");
-        type.validate(this.sourceWalletId, this.destinationWalletId);
+        if (this.transactionType == null) throw new ValidationException("Type cannot be null");
+        transactionType.validate(this.sourceWalletId, this.destinationWalletId);
     }
 }

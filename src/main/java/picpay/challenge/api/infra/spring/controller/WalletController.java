@@ -13,6 +13,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 import picpay.challenge.api.application.usecase.dto.CreateWalletDTO;
 import picpay.challenge.api.application.usecase.dto.DepositDTO;
+import picpay.challenge.api.application.usecase.dto.TransactionDTO;
 import picpay.challenge.api.application.usecase.dto.TransferDTO;
 import picpay.challenge.api.application.usecase.dto.TransferOutputDTO;
 import picpay.challenge.api.application.usecase.dto.WalletDTO;
@@ -39,10 +40,10 @@ public class WalletController {
     }
 
     @PatchMapping("/deposit/{id}")
-    public ResponseEntity<Void> deposit(@PathVariable UUID id, @RequestBody DepositRequestDTO data) {
+    public ResponseEntity<TransactionDTO> deposit(@PathVariable UUID id, @RequestBody DepositRequestDTO data) {
         DepositDTO dto = new DepositDTO(id, data.amount());
-        walletService.deposit(dto);
-        return ResponseEntity.ok().build();
+        TransactionDTO output = walletService.deposit(dto);
+        return ResponseEntity.ok(output);
     }
 
     @PatchMapping("/transfer")

@@ -12,10 +12,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 import picpay.challenge.api.application.usecase.dto.CreateWalletDTO;
+import picpay.challenge.api.application.usecase.dto.TransactionDTO;
 import picpay.challenge.api.domain.enums.WalletType;
 import picpay.challenge.api.infra.spring.controller.dto.DepositRequestDTO;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -58,9 +60,20 @@ public class DepositTests {
         Assertions.assertNotNull(location);
         String id = location.substring(location.lastIndexOf("/") + 1);
         DepositRequestDTO depositPayload = new DepositRequestDTO(BigDecimal.valueOf(50.00));
-        mockMvc.perform(patch(BASE_URL + "/deposit/" + id)
+        MvcResult resultDeposit = mockMvc.perform(patch(BASE_URL + "/deposit/" + id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(depositPayload)))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andReturn();
+        String response = resultDeposit.getResponse().getContentAsString();
+        Assertions.assertNotNull(response);
+        TransactionDTO dto = objectMapper.readValue(response, TransactionDTO.class);
+        Assertions.assertEquals(UUID.fromString(id), dto.destinationWallet());
+        Assertions.assertNotNull(dto.operationId());
+        Assertions.assertNull(dto.sourceWallet());
+        Assertions.assertEquals("50.00", dto.amount());
+        Assertions.assertEquals("COMPLETED", dto.status());
+        Assertions.assertEquals("DEPOSIT", dto.operationType());
+        Assertions.assertNotNull(dto.timestamp());
     }
 }

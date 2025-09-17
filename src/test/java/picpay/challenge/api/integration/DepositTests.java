@@ -15,6 +15,7 @@ import picpay.challenge.api.application.usecase.Deposit;
 import picpay.challenge.api.application.usecase.ICommand;
 import picpay.challenge.api.application.usecase.dto.CreateWalletDTO;
 import picpay.challenge.api.application.usecase.dto.DepositDTO;
+import picpay.challenge.api.application.usecase.dto.TransactionDTO;
 import picpay.challenge.api.application.usecase.dto.WalletDTO;
 import picpay.challenge.api.domain.enums.WalletType;
 import picpay.challenge.api.domain.exception.ValidationException;
@@ -28,11 +29,11 @@ import java.util.UUID;
 @DataJpaTest
 public class DepositTests {
     private final ICommand<CreateWalletDTO, WalletDTO> createWalletCommand;
-    private final ICommand<DepositDTO, WalletDTO> depositCommand;
+    private final ICommand<DepositDTO, TransactionDTO> depositCommand;
     private WalletDTO wallet;
 
     @Autowired
-    public DepositTests(ICommand<CreateWalletDTO, WalletDTO> createWalletCommand, ICommand<DepositDTO, WalletDTO> depositCommand) {
+    public DepositTests(ICommand<CreateWalletDTO, WalletDTO> createWalletCommand, ICommand<DepositDTO, TransactionDTO> depositCommand) {
         this.createWalletCommand = createWalletCommand;
         this.depositCommand = depositCommand;
     }
@@ -50,7 +51,7 @@ public class DepositTests {
         }
 
         @Bean
-        public ICommand<DepositDTO, WalletDTO> depositCommand(IWalletRepository walletRepository) {
+        public ICommand<DepositDTO, TransactionDTO> depositCommand(IWalletRepository walletRepository) {
             return new Deposit(walletRepository);
         }
     }
@@ -70,9 +71,9 @@ public class DepositTests {
     @Test
     public void shouldDepositWithValidData() {
         DepositDTO dto = new DepositDTO(wallet.id(), BigDecimal.valueOf(50.00));
-        WalletDTO output = depositCommand.execute(dto);
-        Assertions.assertEquals(dto.id(), output.id());
-        Assertions.assertEquals(BigDecimal.valueOf(Double.parseDouble(output.balance())), BigDecimal.valueOf(50.00));
+        TransactionDTO output = depositCommand.execute(dto);
+        Assertions.assertEquals(dto.id(), output.destinationWallet());
+        Assertions.assertEquals("50.00", output.amount());
     }
 
     @Test

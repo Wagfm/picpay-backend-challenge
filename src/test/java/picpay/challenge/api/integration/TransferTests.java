@@ -16,6 +16,7 @@ import picpay.challenge.api.application.usecase.ICommand;
 import picpay.challenge.api.application.usecase.Transfer;
 import picpay.challenge.api.application.usecase.dto.CreateWalletDTO;
 import picpay.challenge.api.application.usecase.dto.DepositDTO;
+import picpay.challenge.api.application.usecase.dto.TransactionDTO;
 import picpay.challenge.api.application.usecase.dto.TransferDTO;
 import picpay.challenge.api.application.usecase.dto.TransferOutputDTO;
 import picpay.challenge.api.application.usecase.dto.WalletDTO;
@@ -32,13 +33,13 @@ import java.util.UUID;
 @DataJpaTest
 public class TransferTests {
     private final ICommand<CreateWalletDTO, WalletDTO> createWalletCommand;
-    private final ICommand<DepositDTO, WalletDTO> depositCommand;
+    private final ICommand<DepositDTO, TransactionDTO> depositCommand;
     private final ICommand<TransferDTO, TransferOutputDTO> transferCommand;
     private WalletDTO payer;
     private WalletDTO payee;
 
     @Autowired
-    public TransferTests(ICommand<CreateWalletDTO, WalletDTO> createWalletCommand, ICommand<DepositDTO, WalletDTO> depositCommand, ICommand<TransferDTO, TransferOutputDTO> transferCommand) {
+    public TransferTests(ICommand<CreateWalletDTO, WalletDTO> createWalletCommand, ICommand<DepositDTO, TransactionDTO> depositCommand, ICommand<TransferDTO, TransferOutputDTO> transferCommand) {
         this.createWalletCommand = createWalletCommand;
         this.depositCommand = depositCommand;
         this.transferCommand = transferCommand;
@@ -57,7 +58,7 @@ public class TransferTests {
         }
 
         @Bean
-        public ICommand<DepositDTO, WalletDTO> depositCommand(IWalletRepository walletRepository) {
+        public ICommand<DepositDTO, TransactionDTO> depositCommand(IWalletRepository walletRepository) {
             return new Deposit(walletRepository);
         }
 

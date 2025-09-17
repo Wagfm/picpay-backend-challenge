@@ -9,6 +9,7 @@ import picpay.challenge.api.application.usecase.ICommand;
 import picpay.challenge.api.application.usecase.Transfer;
 import picpay.challenge.api.application.usecase.dto.CreateWalletDTO;
 import picpay.challenge.api.application.usecase.dto.DepositDTO;
+import picpay.challenge.api.application.usecase.dto.TransactionDTO;
 import picpay.challenge.api.application.usecase.dto.TransferDTO;
 import picpay.challenge.api.application.usecase.dto.TransferOutputDTO;
 import picpay.challenge.api.application.usecase.dto.WalletDTO;
@@ -21,7 +22,7 @@ public class BeansConfig {
     }
 
     @Bean
-    public ICommand<DepositDTO, WalletDTO> depositCommand(IWalletRepository walletRepository) {
+    public ICommand<DepositDTO, TransactionDTO> depositCommand(IWalletRepository walletRepository) {
         return new Deposit(walletRepository);
     }
 

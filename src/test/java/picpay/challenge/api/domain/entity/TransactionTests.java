@@ -21,21 +21,9 @@ public class TransactionTests {
                 .destinationWalletId(UUID.randomUUID())
                 .amount(BigDecimal.valueOf(100.00))
                 .status(TransactionStatus.COMPLETED)
-                .type(TransactionType.TRANSFER)
+                .transactionType(TransactionType.TRANSFER)
                 .timestamp(ZonedDateTime.now(ZoneId.of("GMT")));
         Assertions.assertDoesNotThrow(builder::build);
-    }
-
-    @Test
-    public void shouldThrowExceptionWithInvalidOperationId() {
-        Transaction.TransactionBuilder builder = Transaction.builder()
-                .sourceWalletId(UUID.randomUUID())
-                .destinationWalletId(UUID.randomUUID())
-                .amount(BigDecimal.valueOf(100.00))
-                .status(TransactionStatus.COMPLETED)
-                .type(TransactionType.TRANSFER)
-                .timestamp(ZonedDateTime.now(ZoneId.of("GMT")));
-        Assertions.assertThrows(ValidationException.class, builder::build);
     }
 
     @Test
@@ -44,7 +32,7 @@ public class TransactionTests {
                 .operationId(UUID.randomUUID())
                 .amount(BigDecimal.valueOf(100.00))
                 .status(TransactionStatus.COMPLETED)
-                .type(TransactionType.DEPOSIT)
+                .transactionType(TransactionType.DEPOSIT)
                 .timestamp(ZonedDateTime.now(ZoneId.of("GMT")));
         Assertions.assertThrows(ValidationException.class, builder::build);
         builder.destinationWalletId(UUID.randomUUID());
@@ -61,7 +49,7 @@ public class TransactionTests {
                 .operationId(UUID.randomUUID())
                 .amount(BigDecimal.valueOf(100.00))
                 .status(TransactionStatus.COMPLETED)
-                .type(TransactionType.WITHDRAW)
+                .transactionType(TransactionType.WITHDRAW)
                 .timestamp(ZonedDateTime.now(ZoneId.of("GMT")));
         Assertions.assertThrows(ValidationException.class, builder::build);
         builder.sourceWalletId(UUID.randomUUID());
@@ -78,7 +66,7 @@ public class TransactionTests {
                 .operationId(UUID.randomUUID())
                 .amount(BigDecimal.valueOf(100.00))
                 .status(TransactionStatus.COMPLETED)
-                .type(TransactionType.TRANSFER)
+                .transactionType(TransactionType.TRANSFER)
                 .timestamp(ZonedDateTime.now(ZoneId.of("GMT")));
         Assertions.assertThrows(ValidationException.class, builder::build);
         builder.destinationWalletId(UUID.randomUUID());
@@ -98,7 +86,7 @@ public class TransactionTests {
                 .destinationWalletId(duplicateId)
                 .amount(BigDecimal.valueOf(100.00))
                 .status(TransactionStatus.COMPLETED)
-                .type(TransactionType.TRANSFER)
+                .transactionType(TransactionType.TRANSFER)
                 .timestamp(ZonedDateTime.now(ZoneId.of("GMT")));
         Assertions.assertThrows(ValidationException.class, builder::build);
     }
@@ -111,7 +99,7 @@ public class TransactionTests {
                 .sourceWalletId(UUID.randomUUID())
                 .destinationWalletId(UUID.randomUUID())
                 .status(TransactionStatus.COMPLETED)
-                .type(TransactionType.TRANSFER)
+                .transactionType(TransactionType.TRANSFER)
                 .timestamp(ZonedDateTime.now(ZoneId.of("GMT")));
         invalidValues.forEach(value -> Assertions.assertThrows(ValidationException.class, () -> builder.amount(value).build()));
     }
@@ -123,7 +111,7 @@ public class TransactionTests {
                 .sourceWalletId(UUID.randomUUID())
                 .destinationWalletId(UUID.randomUUID())
                 .amount(BigDecimal.valueOf(100.00))
-                .type(TransactionType.TRANSFER)
+                .transactionType(TransactionType.TRANSFER)
                 .timestamp(ZonedDateTime.now(ZoneId.of("GMT")));
         Assertions.assertThrows(ValidationException.class, builder::build);
     }
@@ -148,7 +136,7 @@ public class TransactionTests {
                 .destinationWalletId(UUID.randomUUID())
                 .amount(BigDecimal.valueOf(100.00))
                 .status(TransactionStatus.COMPLETED)
-                .type(TransactionType.TRANSFER);
+                .transactionType(TransactionType.TRANSFER);
         Assertions.assertThrows(ValidationException.class, builder::build);
     }
 }
