@@ -47,7 +47,7 @@ public class WalletController {
 
     @PatchMapping("/transfer")
     public ResponseEntity<TransactionDTO> transfer(@RequestBody TransferDTO data) {
-        TransactionDTO dto = walletService.transfer(data);
-        return ResponseEntity.ok(dto);
+        TransactionDTO output = walletService.transfer(data);
+        return ResponseEntity.ok(output);
     }
 }
