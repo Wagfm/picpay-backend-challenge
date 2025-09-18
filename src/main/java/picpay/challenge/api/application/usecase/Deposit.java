@@ -15,7 +15,6 @@ import picpay.challenge.api.domain.enums.TransactionType;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Optional;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 public class Deposit implements ICommand<DepositDTO, TransactionDTO> {
@@ -30,7 +29,6 @@ public class Deposit implements ICommand<DepositDTO, TransactionDTO> {
         if (optionalWallet.isEmpty()) throw new NotFoundException("Wallet not found");
         Wallet wallet = optionalWallet.get();
         Transaction transaction = Transaction.builder()
-                .operationId(UUID.randomUUID())
                 .destinationWallet(wallet)
                 .amount(input.amount())
                 .transactionType(TransactionType.DEPOSIT)

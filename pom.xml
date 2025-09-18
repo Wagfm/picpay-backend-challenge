@@ -116,6 +116,7 @@
                 <configuration>
                     <excludes>
                         <exclude>**/*Application.class</exclude>
+                        <exclude>**/*DTO.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>

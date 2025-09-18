@@ -15,7 +15,6 @@ import picpay.challenge.api.domain.service.TransferService;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 public class Transfer implements ICommand<TransferDTO, TransactionDTO> {
@@ -32,7 +31,6 @@ public class Transfer implements ICommand<TransferDTO, TransactionDTO> {
         walletRepository.update(payer);
         walletRepository.update(payee);
         Transaction transaction = Transaction.builder()
-                .operationId(UUID.randomUUID())
                 .sourceWallet(payer)
                 .destinationWallet(payee)
                 .amount(input.amount())
