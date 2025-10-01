@@ -11,3 +11,10 @@ spring:
 logging:
     level:
         root: FATAL
+
+app:
+    services:
+        authorization:
+            url: ${AUTHORIZATION_SERVICE_URL:http://127.0.0.1:12345/api/v0/authorize}
+        notification:
+            url: ${NOTIFICATION_SERVICE_URL:http://127.0.0.1:12345/api/v0/notify}

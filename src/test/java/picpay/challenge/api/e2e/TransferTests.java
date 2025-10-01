@@ -2,24 +2,37 @@ package picpay.challenge.api.e2e;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.client.ExpectedCount;
+import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
+import picpay.challenge.api.application.gateway.dto.AuthorizationOutputDto;
+import picpay.challenge.api.application.gateway.dto.Data;
 import picpay.challenge.api.application.usecase.dto.CreateWalletDTO;
 import picpay.challenge.api.application.usecase.dto.TransactionDTO;
 import picpay.challenge.api.application.usecase.dto.TransferDTO;
 import picpay.challenge.api.domain.enums.WalletType;
+import picpay.challenge.api.infra.spring.config.GatewayProperties;
 import picpay.challenge.api.infra.spring.controller.dto.DepositRequestDTO;
 
 import java.math.BigDecimal;
+import java.net.URI;
 import java.util.UUID;
 
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -33,16 +46,37 @@ class TransferTests {
 
     private final MockMvc mockMvc;
     private final ObjectMapper objectMapper;
+    private final MockRestServiceServer mockServer;
+    private final GatewayProperties gatewayProperties;
 
     @Autowired
-    public TransferTests(MockMvc mockMvc) {
+    public TransferTests(MockMvc mockMvc, RestTemplate restTemplate, GatewayProperties gatewayProperties) {
         this.mockMvc = mockMvc;
         this.objectMapper = new ObjectMapper();
         this.objectMapper.registerModule(new JavaTimeModule());
+        this.mockServer = MockRestServiceServer.createServer(restTemplate);
+        this.gatewayProperties = gatewayProperties;
+    }
+
+    @BeforeEach
+    public void setUp() {
+        mockServer.reset();
+    }
+
+    @AfterEach
+    public void tearDown() {
+        mockServer.verify();
     }
 
     @Test
     public void shouldDepositToExistingWalletAndTransferFunds() throws Exception {
+        AuthorizationOutputDto authDto = new AuthorizationOutputDto("success", new Data(true));
+        mockServer.expect(ExpectedCount.once(), requestTo(new URI(gatewayProperties.getAuthorization().getUrl())))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess(objectMapper.writeValueAsString(authDto), MediaType.APPLICATION_JSON));
+        mockServer.expect(ExpectedCount.once(), requestTo(new URI(gatewayProperties.getNotification().getUrl())))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withSuccess("", MediaType.APPLICATION_JSON));
         CreateWalletDTO payloadWallet1 = CreateWalletDTO.builder()
                 .fullName("Wagner Maciel")
                 .cpfCnpj("12345678900")

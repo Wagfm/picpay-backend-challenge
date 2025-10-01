@@ -13,3 +13,10 @@ spring:
             enabled: ${SPRING_LIVERELOAD_ENABLED:false}
         restart:
             enabled: ${SPRING_RESTART_ENABLED:false}
+
+app:
+    services:
+        authorization:
+            url: ${AUTHORIZATION_SERVICE_URL}
+        notification:
+            url: ${NOTIFICATION_SERVICE_URL}
